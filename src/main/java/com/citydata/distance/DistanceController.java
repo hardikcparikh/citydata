@@ -48,7 +48,7 @@ public class DistanceController {
         return new ResponseEntity<Object>(result, HttpStatus.OK);
     }
 
-    public HashMap<String,String> loadCityFileData()
+    private HashMap<String,String> loadCityFileData()
     {
         Resource resource = resourceLoader.getResource("classpath:city.txt");
         HashMap<String,String> cityDataMap=new HashMap<>();
