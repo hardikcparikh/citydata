@@ -27,6 +27,15 @@ public class HttpRequestTest {
                 String.class)).contains("Yes");
         assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/connected?origin=Trenton&destination=Albany",
                 String.class)).contains("Yes");
+
+        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/connected?origin=New York&destination=Boston",
+                String.class)).contains("Yes");
+        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/connected?origin=Newark&destination=Philadelphia",
+                String.class)).contains("Yes");
+        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/connected?origin=Boston&destination=Newark",
+                String.class)).contains("Yes");
+        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/connected?origin=Albany&destination=Trenton",
+                String.class)).contains("Yes");
     }
     @Test
     public void routeNotExist() throws Exception {

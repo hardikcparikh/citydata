@@ -19,6 +19,11 @@ public class DistanceControllerTest {
         assertThat(distanceController.connected("Philadelphia","Newark").toString()).contains("Yes");
         assertThat(distanceController.connected("Newark","Boston").toString()).contains("Yes");
         assertThat(distanceController.connected("Trenton","Albany").toString()).contains("Yes");
+
+        assertThat(distanceController.connected("New York","Boston").toString()).contains("Yes");
+        assertThat(distanceController.connected("Newark","Philadelphia").toString()).contains("Yes");
+        assertThat(distanceController.connected("Boston","Newark").toString()).contains("Yes");
+        assertThat(distanceController.connected("Albany","Trenton").toString()).contains("Yes");
     }
 
     @Test

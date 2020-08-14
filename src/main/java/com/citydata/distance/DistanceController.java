@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
+import java.util.*;
 
 @RestController
 public class DistanceController {
@@ -34,9 +32,10 @@ public class DistanceController {
     {
         String result=null;
         HashMap<String,String> cityDataMap = loadCityFileData();
-        if(cityDataMap.containsKey(origin))
+        if(cityDataMap.containsKey(origin) || cityDataMap.containsValue(origin))
         {
-            if(cityDataMap.get(origin).toString().equalsIgnoreCase(destination))
+            if((cityDataMap.get(origin)!=null && cityDataMap.get(origin).equalsIgnoreCase(destination)) ||
+                    (getKeyByValue(cityDataMap,origin)!=null && getKeyByValue(cityDataMap,origin).equalsIgnoreCase(destination)))
                 result=YES;
             else
                 result=NO;
@@ -47,13 +46,21 @@ public class DistanceController {
         }
         return new ResponseEntity<Object>(result, HttpStatus.OK);
     }
-
+    public  String getKeyByValue(Map<String, String> map, String value) {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                return entry.getKey() ;
+            }
+        }
+        return null;
+    }
     private HashMap<String,String> loadCityFileData()
     {
         Resource resource = resourceLoader.getResource("classpath:city.txt");
         HashMap<String,String> cityDataMap=new HashMap<>();
         try
         {
+            ArrayList<HashSet> cityZoneList=new ArrayList<>();
             InputStream inputStream = resource.getInputStream();
             String data = new String(FileCopyUtils.copyToByteArray(inputStream), StandardCharsets.UTF_8);
             StringTokenizer st= new StringTokenizer(data,"\n");
@@ -61,6 +68,7 @@ public class DistanceController {
                 String line= st.nextElement().toString();
                 StringTokenizer stLine= new StringTokenizer(line,",");
                 cityDataMap.put(stLine.nextToken().trim(),stLine.nextToken().trim());
+
             }
             LOGGER.info(data);
         }
@@ -70,4 +78,5 @@ public class DistanceController {
         }
          return cityDataMap;
     }
+
 }
